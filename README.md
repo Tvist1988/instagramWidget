@@ -6,6 +6,7 @@
 'instagram_user' => 'user',
 'instagram_password' => 'password'
 ];``
+
 2. Поднимите докер контейнеры:
 
 ``docker-compose build``
