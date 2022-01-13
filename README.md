@@ -3,8 +3,8 @@
 1. Создайте файл **_params.php_** в папке _config_ c логином и паролем пользователя
 
 ``return [
-'instagram_user' => 'testdev330',
-'instagram_password' => 'qwaszx123'
+'instagram_user' => 'user',
+'instagram_password' => 'password'
 ];``
 2. Поднимите докер контейнеры:
 
