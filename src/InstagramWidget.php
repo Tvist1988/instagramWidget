@@ -15,53 +15,55 @@ use yii\base\Widget;
 
 class InstagramWidget extends Widget
 {
-     private $user;
-     private $count;
+    private $user;
+    private $count;
 
 
-     public function init()
-     {
-         parent::init();
-         $instagramSettings = InstagramSettings::find()->one();
-         if ($instagramSettings) {
-         $this->user = $instagramSettings->user;
-         $this->count = $instagramSettings->count_posts;
-         } else {
-             $this->user = 'forbes.russia';
-             $this->count = 5;
-         }
-     }
+    public function init()
+    {
+        parent::init();
+        $instagramSettings = InstagramSettings::find()->one();
+        if ($instagramSettings) {
+            $this->user = $instagramSettings->user;
+            $this->count = $instagramSettings->count_posts;
+        } else {
+            $this->user = 'forbes.russia';
+            $this->count = 5;
+        }
+    }
 
-     public function run() {
-         try {
-         $instagram = Instagram::withCredentials(new Client(),
-         Yii::$app->params['instagram_user'], Yii::$app->params['instagram_password'], new Psr16Adapter('Files'));
+    public function run()
+    {
+        try {
+            $instagram = Instagram::withCredentials(new Client(),
+                Yii::$app->params['instagram_user'], Yii::$app->params['instagram_password'], new Psr16Adapter('Files'));
             try {
-             $instagram->login();
+                $instagram->login();
 
             } catch (InstagramAuthException $ex) {
                 return $ex->getMessage();
             }
-             $instagram->saveSession();
+            $instagram->saveSession();
             try {
-         $medias = $instagram->getMedias($this->user, $this->count);
-         return $this->render('_instagram', ['feed' => $medias]);
+                $medias = $instagram->getMedias($this->user, $this->count);
+                return $this->render('_instagram', ['feed' => $medias]);
             } catch (InstagramNotFoundException $ex) {
                 return $ex->getMessage();
             }
-         } catch (InstagramException $ex) {
-             return $ex->getMessage() . ' Код ошибки ' . $ex->getCode();
-         }
+        } catch (InstagramException $ex) {
+            return $ex->getMessage() . ' Код ошибки ' . $ex->getCode();
+        }
 
-}
+    }
 
     /**
      * @param string $url
      * @return string
      */
-     public static function getSrcImage(string $url):string {
-         $imageData = base64_encode(file_get_contents($url));
-         $src = 'data:img/jpeg;base64,' . $imageData;
-         return $src;
-     }
+    public static function getSrcImage(string $url): string
+    {
+        $imageData = base64_encode(file_get_contents($url));
+        $src = 'data:img/jpeg;base64,' . $imageData;
+        return $src;
+    }
 }
